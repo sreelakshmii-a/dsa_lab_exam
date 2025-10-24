@@ -1,0 +1,83 @@
+data segment
+	str db 0dh,0ah,"enter main string:$"
+	str1 db 0dh,0ah,"enter substring:$"
+	str2 db 0dh,0ah,"found$"
+	str3 db 0dh,0ah,"not found$"
+	buffer1 db 20
+	db 0
+	db 20 dup(?)
+	buffer2 db 20
+	db 0
+	db 20 dup(?)
+data ends
+
+code segment
+assume cs:code,ds:data
+start:
+
+mov ax,data
+mov ds,ax
+
+mov dx,offset str
+mov ah,09h
+int 21h
+
+mov dx,offset buffer1
+mov ah,0Ah
+int 21h
+
+mov dx,offset str1
+mov ah,09h
+int 21h
+
+mov dx,offset buffer2
+mov ah,0Ah
+int 21h
+
+mov cl,buffer1+1
+mov bl,buffer2+1
+mov si,offset buffer1+2
+mov di,offset buffer2+2
+
+outer_loop:
+cmp cl,bl
+jb not_found
+push si
+push di
+mov ch,bl
+
+inner_loop:
+mov al,[si]
+mov dl,[di]
+cmp al,dl
+jne next_char
+inc si
+inc di
+dec ch
+jz found
+jmp inner_loop
+
+next_char:
+pop di
+pop si
+inc si
+dec cl
+jmp outer_loop
+
+found:
+mov dx,offset str2
+mov ah,09h
+int 21h
+jmp exit_prog
+
+not_found:
+mov dx,offset str3
+mov ah,09h
+int 21h
+
+exit_prog:
+mov ah,4ch
+int 21h
+
+code ends
+end start

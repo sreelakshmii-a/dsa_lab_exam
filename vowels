@@ -1,0 +1,63 @@
+data segment
+	str db 0dh,0ah,"enterstring:$"
+	str2 db 0dh,0ah,"number of vowels:$"
+	buffer1 db 20
+	db 0
+	db 20 dup(?)
+data ends
+
+code segment
+assume cs:code,ds:data
+start:
+
+mov ax,data
+mov ds,ax
+
+mov dx,offset str
+mov ah,09h
+int 21h
+
+mov dx,offset buffer1
+mov ah,0Ah
+int 21h
+
+mov si,offset buffer1+2
+mov cx,0
+check_vowels:
+mov al,[si]
+cmp al,0
+je  print_vowel
+cmp al,'a'
+je inc_count
+cmp al,'e'
+je inc_count
+cmp al,'i'
+je inc_count
+cmp al,'o'
+je inc_count
+cmp al,'u'
+je inc_count
+jmp next_char
+
+inc_count:
+inc cx
+
+next_char:
+inc si
+jmp check_vowels
+
+print_vowel:
+mov dx,offset str2
+mov ah,09h
+int 21h
+
+add cx,'0'
+mov dx,cx
+mov ah,02h
+int 21h
+
+mov ah,4ch
+int 21h
+
+code ends
+end start
