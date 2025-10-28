@@ -1,0 +1,31 @@
+create or replace procedure hosp(docId in number)
+is
+  v_count number:=0;
+
+begin
+for x in 
+  (SELECT P.Patient_ID, 
+           P.Patient_Name, 
+           T.Treatment_Cost
+    FROM Treatment T
+    JOIN Appointment A ON T.App_Id = A.App_Id
+    JOIN Patient P ON A.Patient_Id = P.Patient_Id
+    JOIN Doctor D ON A.Doctor_Id = D.Doctor_Id
+    WHERE D.Doctor_ID= docId
+
+  )
+  loop
+    dbms_output.put_line('Patient ID: '||x.Patient_ID);
+    v_count:=v_count+1;
+    end loop;
+  if v_count=0 then
+    dbms_output.put_line('no patients');
+  end if;
+END;
+/
+DECLARE
+  doc_id int := '&Doctor_ID';
+BEGIN
+  hosp(doc_id);
+END;
+/
