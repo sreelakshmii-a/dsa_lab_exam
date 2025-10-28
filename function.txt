@@ -1,0 +1,22 @@
+Create or replace function Status(supcode in number)
+return varchar2
+is
+  v_count number;
+begin
+  select count(*) into v_count from can_supply where supplier_code=supcode;
+  if v_count>5 then
+    update supplier set status='Important' where supplier_code=supcode;
+    return 'Status is important';
+  
+  else 
+    return 'Status is normal';
+  end if;
+  exception
+  when no_data_found then
+    return 'Not found';
+End;
+/
+Begin
+  dbms_output.put_line(Status(101));
+End;
+/

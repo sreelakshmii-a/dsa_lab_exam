@@ -1,0 +1,28 @@
+create or replace procedure taxCal(empno in number)
+is
+ v_salary number;
+ v_tax number;
+begin 
+ select salary into v_salary from employee where emp_id=empno;
+ if v_salary<100000 then
+  v_tax:=0;
+elsif v_salary>=100000 and v_salary<150000 then
+  v_tax:=0.1*(v_salary-100000);
+elsif v_salary>=150000 and v_salary<200000 then
+   v_tax:=0.2*(v_salary-100000);
+else 
+   v_tax:=0.3*(v_salary-100000);
+end if;
+dbms_output.put_line('Taxable amount is '||v_tax);
+
+end;
+/
+
+declare
+  empid number:=&Employee_id;
+begin
+  taxCal(empid);
+end;
+/
+
+
