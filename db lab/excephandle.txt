@@ -1,0 +1,54 @@
+Creaate or replace procedure empinfo(empno in number)
+is
+  v_name varchar(20);
+  v_salary number;
+  v_location varchar(20);
+begin
+  Select emp_name,emp_salary,emp_city into v_name,v_salary,v_location from
+  Employee where emp_id=empno;
+  dbms_output.put_line('');
+  exception
+  when no_data_found then
+    dbms('Invalid empno');
+end;
+/
+declare 
+  empid number:=&empo;
+begin
+  empinfo(empid);
+end;
+/
+create table student(student_id int primary key,student_name varchar(20));
+insert into student values(&student_id,'&student_name');
+
+
+
+
+
+
+
+(b)
+create or replace procedure minsalary(empno in number)
+is
+  v_salary number;
+  minSal number:=10000;
+  myexp exception;
+begin
+  select salary into v_salary from employee where emp_id=empno;
+  if v_salary<minSal then
+    raise myexp;
+  else 
+    dbms_output.put_line('The salary is above minimum');
+  end if;
+  exception
+  when myexp then
+    dbms_output.put_line('The salary is less');
+end;
+/
+declare
+  empid number:=&empid;
+begin
+  minsalary(empid);
+end;
+/
+
