@@ -1,0 +1,11 @@
+create or replace trigger ordercount
+after insert on customer_order
+for each row
+
+begin
+  
+  
+  update customer set total_orders=NVL(total_order,0)+1 where
+  customerno=:NEW.customerno;
+end;
+/
