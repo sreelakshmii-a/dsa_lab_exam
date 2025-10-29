@@ -1,0 +1,22 @@
+declare 
+  cursor custom is
+  select emp_id,emp_name,emp_salary from employee order by emp_salary desc;
+
+  empgo custom%rowtype;
+  vlimit NUMBER := 0;
+  vtotal NUMBER := 0;
+begin
+  open custom;
+  loop
+    fetch custom into empgo;
+    exit when custom%notfound;
+    if vlimit<5 then
+      dbms_output.put_line('Name: ' ||empgo.emp_name||'    Salary: '||empgo.emp_salary);
+      vtotal:=nvl(vtotal,0)+empgo.emp_salary;
+      vlimit:=nvl(vlimit,0)+1;
+    end if;
+  end loop;
+  close custom;
+  dbms_output.put_line('Total salary is: '||vtotal);
+  end;
+  /
