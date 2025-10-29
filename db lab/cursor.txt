@@ -20,3 +20,38 @@ begin
   dbms_output.put_line('Total salary is: '||vtotal);
   end;
   /
+
+
+
+
+
+(b)
+create or replace procedure displayPat(docID in number)
+is
+  cursor custom is
+  Select Patient_Id,P.Name from patient P
+  Join Appointment A ON P.patient_id=A.patient_id
+  Join Doctor D on D.Doctor_id=A.Doctor_id
+  where A.Doctor_id=docID;
+
+  patgo custom%rowtype;
+
+begin
+  dbms_output.put_line('Patient Details');
+  open custom;
+  loop
+    fetch custom into patgo;
+    exit when custom%notfound;
+    dbms_output.put_line('Id:' ||patgo.Patient_Id||'  Name:'||patgo.Name);
+  end loop;
+  close custom;
+end;
+/
+
+declare
+  Docid number:=&Doctor_ID;
+begin
+  displayPat(Docid);
+end;
+/
+
