@@ -1,0 +1,10 @@
+begin
+  insert into employee(emp_id,emp_name) values(101,Sharika);
+  commit;
+  savepoint stampone;
+  update employee set name=Janvi where emp_id=101;
+  roll back to stampone;
+  commit;
+
+end;
+/
