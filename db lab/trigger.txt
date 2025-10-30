@@ -1,6 +1,7 @@
 create or replace trigger ordercount
 after insert on customer_order
 for each row
+declare
 
 begin
   
