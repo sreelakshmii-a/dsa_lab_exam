@@ -47,11 +47,34 @@ int main(){
       }
     }
 
-    else if(strcmp(operand,"WORD")==0){
-      
+    else if(strcmp(opcode,"WORD")==0){
+      fprintf(fout,"%06d",atoi(operand));
     }
 
+    else if(strcmp(opcode,"BYTE")==0){
+      if(operand[0]=='C'){
+        for(int i=2;operand[i]!='\'';i++){
+          fprintf(fout,"%X",operand[i]);
+        }
+        fprintf(fout," ");
+      }
+    }
+   else if(strcmp(opcode, "RESW") == 0 || strcmp(opcode, "RESB") == 0){
+    fprintf(fout,"-");
+   }
+
+   fscanf(fin,"%s %s %s",label,opcode,operand);
+
+
   }
+  fprintf(fout,"E^00%s\n",operand);
+  printf("Pass Two completed. Object program generated.\n");
 
-
+    fclose(fin);
+    fclose(fsym);
+    fclose(fopt);
+    fclose(fout);
+    return 0;
 }
+
+
